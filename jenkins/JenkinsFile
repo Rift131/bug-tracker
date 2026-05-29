@@ -14,8 +14,13 @@ pipeline {
             // "steps" are your terminal commands needed to run the unit tests
             steps {
                 dir('bugtracker-backend') {
-                  sh 'go test -v ./...' // Same terminal command you would use to run locally (sh means "shell command")
+                  sh 'go test -v ./... 2>&1 | go-junit-report > test-results.xml' // Same terminal command you would use to run locally (sh means "shell command")
                 }
+            }
+            post{
+              always {
+                junit 'bugtracker-backend/test-results.xml'
+              }
             }
         }
         stage('Unit Tests - Frontend') {
