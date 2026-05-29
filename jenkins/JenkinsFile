@@ -10,6 +10,9 @@ pipeline {
                 reuseNode true // Ensure this image is used throughout the Jenkins pipeline
               }
             }
+            environment {
+              GOCACHE = "${WORKSPACE}/bugtracker-backend/.cache/go-build"
+            }
             // "steps" are your terminal commands needed to run the unit tests
             steps {
                 dir('bugtracker-backend') {
