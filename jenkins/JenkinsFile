@@ -4,14 +4,16 @@ pipeline {
     stages {
         stage('Unit Tests - Backend') {
             agent {
+              // This is a docker image created by the instructor that has everything the unit tests need in order to run such as "go-lang"
               docker {
                 image 'snakee/golang-junit:1.21'
-                reuseNode true
+                reuseNode true // Ensure this image is used throughout the Jenkins pipeline
               }
             }
+            // "steps" are your terminal commands needed to run the unit tests
             steps {
                 dir('bugtracker-backend') {
-                  sh 'go test -v ./...'
+                  sh 'go test -v ./...' // Same terminal command you would use to run locally (sh means "shell command")
                 }
             }
         }
