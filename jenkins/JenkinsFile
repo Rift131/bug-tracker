@@ -18,12 +18,13 @@ pipeline {
                 }
             }
         }
-        stage('Unit Tests - Frontend"') {
+        stage('Unit Tests - Frontend') {
           agent {
             docker {
               image 'node:20-alpine'
               reuseNode true
             }
+          }
             steps {
               // The 3 single quotes wrapping the shell commands allow you to have to type "sh" only once. The shell commands are: install dependencies (ci) followed by running the tests.
               dir('bugtracker-frontend'){
@@ -32,7 +33,6 @@ pipeline {
                   npm test
                 '''
               }
-            }
           }
         }
     }
