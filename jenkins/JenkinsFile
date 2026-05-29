@@ -8,7 +8,7 @@ pipeline {
               docker {
                 image 'snakee/golang-junit:1.21'
                 reuseNode true // Ensure this image is used throughout the Jenkins pipeline
-                args '-u root' // Run as root so Go can write to /go and /.cache inside the container (local dev only)
+                args '-u root' // Run as root so Go can write to /go and /.cache inside the container (local dev only). In a real CI environment, this issue would be solved at the Docker image level, not here like this
               }
             }
             // "steps" are your terminal commands needed to run the unit tests
@@ -17,6 +17,23 @@ pipeline {
                   sh 'go test -v ./...' // Same terminal command you would use to run locally (sh means "shell command")
                 }
             }
+        }
+        stage('Unit Tests - Frontend"') {
+          agent {
+            docker {
+              image 'node:20-alpine'
+              reuseNode true
+            }
+            steps {
+              // The 3 single quotes wrapping the shell commands allow you to have to type "sh" only once. The shell commands are: install dependencies (ci) followed by running the tests.
+              dir('bugtracker-frontend'){
+                sh '''
+                  npm ci
+                  npm test
+                '''
+              }
+            }
+          }
         }
     }
 }
