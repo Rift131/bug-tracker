@@ -8,10 +8,8 @@ pipeline {
               docker {
                 image 'snakee/golang-junit:1.21'
                 reuseNode true // Ensure this image is used throughout the Jenkins pipeline
+                args '-u root' // Run as root so Go can write to /go and /.cache inside the container (local dev only)
               }
-            }
-            environment {
-              GOCACHE = "${WORKSPACE}/bugtracker-backend/.cache/go-build"
             }
             // "steps" are your terminal commands needed to run the unit tests
             steps {
